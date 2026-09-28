@@ -1,0 +1,32 @@
+# Secrets: never commit real keys or the session-signing secret
+.env
+.env.*
+!.env.example
+backend/.session_secret
+
+# Local-only data pack (the database and the product images)
+data/
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Product images the backend cleans and caches from data/products/
+backend/.image_cache/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node / Vite
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

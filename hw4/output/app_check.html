@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App check — Yale Bulldog Blue by Campus Customs</title>
+<style>
+  :root {
+    --yale: #00356b;
+    --yale-2: #286dc0;
+    --ink: #0d1b2e;
+    --muted: #5b6878;
+    --paper: #faf8f4;
+    --card: #ffffff;
+    --line: #e4e0d8;
+    --pass: #1f8a55;
+    --pass-bg: #e6f5ec;
+    --warn-bg: #fff6e0;
+    --warn: #8a5a00;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font: 16px/1.6 "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+  }
+  a { color: var(--yale-2); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+  header.top {
+    background: linear-gradient(135deg, #002a55, var(--yale) 55%, #174f8f);
+    color: #fff;
+    padding: 56px 0 44px;
+  }
+  .eyebrow { font-size: .78rem; letter-spacing: .2em; text-transform: uppercase; opacity: .75; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: 2.6rem; line-height: 1.15; margin: 10px 0 12px; }
+  header.top p { max-width: 760px; margin: 0; opacity: .9; }
+  .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+  .meta span { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); padding: 5px 12px; border-radius: 999px; font-size: .85rem; }
+
+  nav.toc { position: sticky; top: 0; z-index: 5; background: rgba(250,248,244,.95); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+  nav.toc .wrap { display: flex; gap: 22px; flex-wrap: wrap; padding-top: 12px; padding-bottom: 12px; font-size: .92rem; }
+  nav.toc a { text-decoration: none; color: var(--ink); font-weight: 600; }
+  nav.toc a:hover { color: var(--yale-2); }
+
+  section { padding: 44px 0 10px; scroll-margin-top: 40px; }
+  h2 { font-family: Georgia, "Times New Roman", serif; font-size: 1.9rem; margin: 0 0 6px; color: var(--yale); }
+  h3 { font-size: 1.12rem; margin: 30px 0 10px; }
+  .lede { color: var(--muted); max-width: 860px; margin: 0 0 18px; }
+
+  .badge { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .08em; padding: 3px 10px; border-radius: 999px; background: var(--pass-bg); color: var(--pass); vertical-align: middle; }
+  .badge--fixed { background: var(--warn-bg); color: var(--warn); }
+
+  table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: .94rem; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #f1eee8; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  tr:last-child td { border-bottom: 0; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .hit { background: #fff3cd; font-weight: 700; }
+  .zero { color: #b3261e; font-weight: 700; }
+
+  .chat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 10px; }
+  .q, .a { max-width: 88%; padding: 10px 14px; border-radius: 14px; }
+  .q { justify-self: end; background: var(--yale); color: #fff; border-bottom-right-radius: 4px; }
+  .a { background: #f3f1ec; border-bottom-left-radius: 4px; }
+  .who { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; opacity: .7; display: block; margin-bottom: 2px; }
+  .secs { font-size: .8rem; color: var(--muted); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .split { display: grid; grid-template-columns: 1.55fr 1fr; gap: 22px; align-items: start; }
+
+  figure { margin: 0; background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px -18px rgba(13,27,46,.35); }
+  figure a { display: block; background: #eef1f5; }
+  figure img { display: block; width: 100%; height: auto; }
+  figure.tall img { max-height: 760px; width: auto; max-width: 100%; margin: 0 auto; }
+  figcaption { padding: 12px 16px 14px; font-size: .93rem; }
+  figcaption b { color: var(--yale); }
+  .shot-id { display: block; font-size: .75rem; color: var(--muted); margin-top: 4px; font-family: Consolas, monospace; }
+
+  .proof { margin-top: 18px; background: var(--pass-bg); border: 1px solid #bfe3cd; border-radius: 12px; padding: 14px 18px; }
+  .proof b { color: var(--pass); }
+  .note { font-size: .88rem; color: var(--muted); margin-top: 10px; }
+
+  footer { margin-top: 50px; padding: 30px 0 50px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+
+  @media (max-width: 860px) {
+    .grid2, .grid3, .split { grid-template-columns: 1fr; }
+    h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Problem 11 · Site testing (app check)</div>
+    <h1>App check: Yale Bulldog Blue by Campus Customs</h1>
+    <p>We tested the running site in a real browser: every question below was typed into the live chatbot, every screenshot comes from that session, and every stock level and price was checked against the SQLite database the store runs on.</p>
+    <div class="meta">
+      <span>Run: Monday, September 28, 2026, 7:25–7:28 PM</span>
+      <span>Frontend: React + Vite on 127.0.0.1:5173</span>
+      <span>Backend: FastAPI + PydanticAI agent (gpt-5.6-sol) on :8000</span>
+      <span>Data: data/campus_customs.db</span>
+      <span>Browser: Microsoft Edge driven by Playwright</span>
+    </div>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <a href="#summary">Summary</a>
+    <a href="#check1">1 · Inventory check</a>
+    <a href="#check2">2 · Dynamic search cards</a>
+    <a href="#check3">3 · Usability features</a>
+    <a href="#fixed">Bugs found &amp; fixed</a>
+    <a href="#method">Method</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <!-- ============================================================ SUMMARY -->
+  <section id="summary">
+    <h2>Summary</h2>
+    <p class="lede">All three required checks passed on the live site. Click any screenshot to open it at full resolution.</p>
+    <table>
+      <thead><tr><th style="width:26%">Check</th><th style="width:10%">Result</th><th>What the test proves</th><th style="width:20%">Evidence</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><a href="#check1"><b>1. Chatbot checks inventory</b></a></td>
+          <td><span class="badge">PASS</span></td>
+          <td>The chatbot quoted the exact database stock and price in two cases. For the Basic Hoodie Big Yale in XL it said "only 2 are left" at $68 (database: XL = 2, $68). For the Champion Reverse Weave Crewneck in L it said "sold out" (database: L = 0) and named M and XL, the only sizes with stock.</td>
+          <td>Figures 1.1–1.4, database table</td>
+        </tr>
+        <tr>
+          <td><a href="#check2"><b>2. Dynamic search result cards</b></a></td>
+          <td><span class="badge">PASS</span></td>
+          <td>"What hoodies do you have?" opened a page the chatbot built for the question, with its own headline and 27 cards, all hoodies (the database has 27). "Show me navy hoodies under $70" produced 23 cards on a phone (database: 23).</td>
+          <td>Figures 2.1–2.5</td>
+        </tr>
+        <tr>
+          <td><a href="#check3"><b>3. Best of the Problem 9 usability features</b></a></td>
+          <td><span class="badge">PASS</span></td>
+          <td>A signed-in customer asked the chatbot to add an item "in my size" and save another to her wishlist, and it did both. She then checked out with store pickup, and the order, wishlist and saved size all appeared in My Account. The order took 1 unit off the database stock.</td>
+          <td>Figures 3.1–3.9</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============================================================ CHECK 1 -->
+  <section id="check1">
+    <h2>Check 1 — Chatbot checks an item's inventory level <span class="badge">PASS</span></h2>
+    <p class="lede">We asked two stock questions in a fresh chat each: one about a size that is nearly sold out and one about a size that is sold out. The chatbot has no stock numbers memorised; it has to look them up in the database with its stock tool every time.</p>
+
+    <h3>Database truth at test time (<code>inventory</code> and <code>catalogue</code> tables)</h3>
+    <table>
+      <thead><tr><th>Product</th><th>Price</th><th>XS</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th></tr></thead>
+      <tbody>
+        <tr><td>Basic Hoodie Big Yale</td><td class="num hit">$68.00</td><td class="num">15</td><td class="num">5</td><td class="num">5</td><td class="num">8</td><td class="num hit">2</td><td class="num">25</td></tr>
+        <tr><td>Champion Reverse Weave Crewneck</td><td class="num">$58.00</td><td class="num zero">0</td><td class="num zero">0</td><td class="num">12</td><td class="num zero hit">0</td><td class="num">12</td><td class="num zero">0</td></tr>
+        <tr><td>Yale Sports Crewneck Volleyball (suggested alternative)</td><td class="num">$58.00</td><td colspan="3" class="note">—</td><td class="num">25</td><td colspan="2" class="note">—</td></tr>
+      </tbody>
+    </table>
+
+    <h3>What the chatbot answered</h3>
+    <div class="grid2">
+      <div class="chat">
+        <div class="q"><span class="who">Customer</span>Is the Basic Hoodie Big Yale in stock in XL, and how much does it cost?</div>
+        <div class="a"><span class="who">Concierge</span>Good news — the Basic Hoodie Big Yale is in stock in XL, but only 2 are left. It costs $68. Want me to add one to your bag? <span class="secs">(4.7 s)</span></div>
+      </div>
+      <div class="chat">
+        <div class="q"><span class="who">Customer</span>Do you have the Champion Reverse Weave Crewneck in size L?</div>
+        <div class="a"><span class="who">Concierge</span>The Champion Reverse Weave Crewneck is sold out in size L. M and XL are currently in stock; for another L crewneck, the Yale Sports Crewneck Volleyball is available at $58. <span class="secs">(3.7 s)</span></div>
+      </div>
+    </div>
+
+    <h3>Screenshots</h3>
+    <div class="grid2">
+      <figure class="tall">
+        <a href="app_check_images/inventory_low_stock_chat.png" target="_blank"><img src="app_check_images/inventory_low_stock_chat.png" alt="Chatbot answers that the Basic Hoodie Big Yale has only 2 left in XL at $68"></a>
+        <figcaption><b>Figure 1.1 — Low stock, exact count and price.</b> The chatbot reports "only 2 are left" in XL at $68, the same as the database row (XL = 2, price $68.00). It gives the exact count because the size is running low, then offers to add it to the bag.<span class="shot-id">inventory_low_stock_chat.png</span></figcaption>
+      </figure>
+      <figure class="tall">
+        <a href="app_check_images/inventory_sold_out_chat.png" target="_blank"><img src="app_check_images/inventory_sold_out_chat.png" alt="Chatbot answers that the Champion crewneck is sold out in L and suggests an in-stock alternative"></a>
+        <figcaption><b>Figure 1.2 — Sold out, handled honestly.</b> The chatbot says size L is sold out and names M and XL, the only sizes with stock (12 each). It then suggests a $58 crewneck that really has 25 in L, shown as a clickable card.<span class="shot-id">inventory_sold_out_chat.png</span></figcaption>
+      </figure>
+    </div>
+    <div class="grid2" style="margin-top:22px">
+      <figure>
+        <a href="app_check_images/inventory_product_page.png" target="_blank"><img src="app_check_images/inventory_product_page.png" alt="Product page showing only 2 left in XL and the per-size stock table"></a>
+        <figcaption><b>Figure 1.3 — The product page shows the same numbers.</b> The product page reads the same database and shows "Only 2 left in size XL" at $68, with the full stock table (15 / 5 / 5 / 8 / 2 / 25). The chatbot and the store agree.<span class="shot-id">inventory_product_page.png</span></figcaption>
+      </figure>
+      <figure>
+        <a href="app_check_images/inventory_low_stock_full.png" target="_blank"><img src="app_check_images/inventory_low_stock_full.png" alt="Full browser window with the chatbot answering on the live store"></a>
+        <figcaption><b>Figure 1.4 — In context on the live site.</b> The full browser window during the first question, with the chat open over the running store.<span class="shot-id">inventory_low_stock_full.png</span></figcaption>
+      </figure>
+    </div>
+    <div class="proof"><b>Proven:</b> both answers match the database exactly, for stock (2 left; sold out, with the right sizes still available) and for price ($68, and $58 for the alternative). The chatbot neither made up stock nor hid a sell-out.</div>
+    <p class="note">For the two chat close-ups (Figures 1.1 and 1.2) the chat window was made taller for the screenshot only, so the question and the full answer fit in one image. The site itself was not changed.</p>
+  </section>
+
+  <!-- ============================================================ CHECK 2 -->
+  <section id="check2">
+    <h2>Check 2 — Dynamic search result cards after a category question <span class="badge">PASS</span></h2>
+    <p class="lede">We asked a category question in the chat on the home page. The chatbot searches the catalogue, then opens a results page built for that question: it writes a headline and intro and quotes the customer's question. Results appear in two places: as a mini-carousel of cards in the chat, and as the full product grid on the page.</p>
+
+    <div class="chat" style="max-width:860px">
+      <div class="q"><span class="who">Customer</span>What hoodies do you have?</div>
+      <div class="a"><span class="who">Concierge</span>We have 27 hoodie styles on the page, including classic Yale graphics, full-zips, varsity sports, and family designs. My top picks are the Basic Hoodie Big Yale at $68, the Champion Full Zip Hood at $88, and the Yale Sports Hoodie Tennis at $45. Want me to narrow them by size, color, or budget? <span class="secs">(1.5 s)</span></div>
+    </div>
+
+    <h3>Screenshots</h3>
+    <figure>
+      <a href="app_check_images/search_results.png" target="_blank"><img src="app_check_images/search_results.png" alt="Results page titled Hoodies for every Yale fan with You asked pill and 27 concierge picks"></a>
+      <figcaption><b>Figure 2.1 — The answer becomes a results page.</b> The site moved to <code>/products?concierge=…</code>, with a headline the chatbot wrote ("Hoodies for every Yale fan"), a "You asked" pill quoting the question, and a "Concierge picks 27" filter. The chat stays docked on the right, with a link back to the page and a carousel of the same cards.<span class="shot-id">search_results.png</span></figcaption>
+    </figure>
+    <div class="grid2" style="margin-top:22px">
+      <figure>
+        <a href="app_check_images/search_results_scrolled.png" target="_blank"><img src="app_check_images/search_results_scrolled.png" alt="Grid of hoodie product cards with images, names and prices"></a>
+        <figcaption><b>Figure 2.2 — The cards themselves.</b> Every card shows a real product photo, category, colours, name, description and price from the catalogue. All 27 cards are hoodies, and the database has exactly 27 hoodies.<span class="shot-id">search_results_scrolled.png</span></figcaption>
+      </figure>
+      <figure>
+        <a href="app_check_images/search_card_click.png" target="_blank"><img src="app_check_images/search_card_click.png" alt="Product page for Basic Hoodie Big Yale opened from the first card"></a>
+        <figcaption><b>Figure 2.3 — Cards are live links.</b> Clicking the first card opens the Basic Hoodie Big Yale product page, with live stock per size. That makes it one question, one click, and the customer is ready to buy.<span class="shot-id">search_card_click.png</span></figcaption>
+      </figure>
+    </div>
+
+    <h3>Same feature on a phone, with a narrower question</h3>
+    <div class="chat" style="max-width:860px">
+      <div class="q"><span class="who">Customer</span>Show me navy hoodies under $70</div>
+      <div class="a"><span class="who">Concierge</span>I found 23 navy hoodies under $70 and put them all on the page. The classic Basic Hoodie Big Yale is $68, while the Ua Gameday Double Knit Hood is a sharp $45 option. <span class="secs">(1.6 s)</span></div>
+    </div>
+    <div class="grid2" style="margin-top:22px">
+      <figure class="tall">
+        <a href="app_check_images/search_results_mobile_chat.png" target="_blank"><img src="app_check_images/search_results_mobile_chat.png" alt="Phone view: chat shrinks to a compact sheet and the results page title Navy hoodies under $70 loads behind it"></a>
+        <figcaption><b>Figure 2.4 — The phone opens the page behind the chat.</b> On a 390 px phone the chat shrinks to a compact sheet ("Your results are on the page") while the "Navy hoodies under $70" page loads behind it.<span class="shot-id">search_results_mobile_chat.png</span></figcaption>
+      </figure>
+      <figure class="tall">
+        <a href="app_check_images/search_results_mobile.png" target="_blank"><img src="app_check_images/search_results_mobile.png" alt="Phone view of 23 navy hoodie cards under $70"></a>
+        <figcaption><b>Figure 2.5 — The filtered cards on a phone.</b> 23 cards, all navy hoodies priced $45 or $68, the same count as the database query (hoodie, colour contains "navy", price &lt; $70 → 23). The layout fits the 390 px screen exactly, with no sideways scrolling.<span class="shot-id">search_results_mobile.png</span></figcaption>
+      </figure>
+    </div>
+    <div class="proof"><b>Proven:</b> a plain category question produces a new results page with product cards matching the question. The count matched the database for the broad question (27 of 27 hoodies) and for the filtered one (23 of 23 navy hoodies under $70), and the cards open the real product pages.</div>
+  </section>
+
+  <!-- ============================================================ CHECK 3 -->
+  <section id="check3">
+    <h2>Check 3 — Best of the Problem 9 usability features <span class="badge">PASS</span></h2>
+    <p class="lede">We walked through a full visit as a new test customer, Maya Chen. She signed up with a hashed password and saved M as her size. We tested the four Problem 9 features that remove the most friction: a chatbot that <b>acts</b> (adds to the bag and saves to the wishlist) instead of only answering; live progress messages while it works; a one-page checkout with store pickup; and a My Account page that remembers orders, the wishlist and her size.</p>
+
+    <h3>A. The concierge acts for the customer</h3>
+    <div class="chat" style="max-width:860px">
+      <div class="q"><span class="who">Maya, on the Basic Hoodie Big Yale page</span>Please add this hoodie to my bag in my size, and save the Champion Reverse Weave Crewneck to my wishlist.</div>
+      <div class="a"><span class="who">Concierge</span>Done, Maya — I added 1 Basic Hoodie Big Yale in M at $68 to your bag, and saved the Champion Reverse Weave Crewneck to your wishlist. Your bag is at the top right whenever you're ready to check out. <span class="secs">(6.3 s)</span></div>
+    </div>
+    <div class="grid2" style="margin-top:22px">
+      <figure class="tall">
+        <a href="app_check_images/usability_streaming_status.png" target="_blank"><img src="app_check_images/usability_streaming_status.png" alt="Chat showing the live status Saving it to your wishlist while the concierge works"></a>
+        <figcaption><b>Figure 3.1 — Live progress while it works.</b> Instead of a silent spinner, the chat shows what the agent is doing at that moment ("Saving it to your wishlist…"), streamed from the backend as each tool runs. The greeting uses her first name because she is signed in.<span class="shot-id">usability_streaming_status.png</span></figcaption>
+      </figure>
+      <figure class="tall">
+        <a href="app_check_images/usability_concierge_actions_chat.png" target="_blank"><img src="app_check_images/usability_concierge_actions_chat.png" alt="Two confirmation chips: added to your bag size M and saved to your wishlist"></a>
+        <figcaption><b>Figure 3.2 — Two actions, two confirmations.</b> "In my size" became M, the size saved in her profile, and both actions come back as confirmation chips with "View bag" and "Wishlist" buttons. The customer never had to pick a size or leave the chat.<span class="shot-id">usability_concierge_actions_chat.png</span></figcaption>
+      </figure>
+    </div>
+    <figure style="margin-top:22px">
+      <a href="app_check_images/usability_concierge_actions.png" target="_blank"><img src="app_check_images/usability_concierge_actions.png" alt="Full page: bag badge shows 1, toast confirms the add, product page preselects size M"></a>
+      <figcaption><b>Figure 3.3 — The whole site reacts.</b> The bag icon now shows 1 and a toast confirms "Added Basic Hoodie Big Yale (M) to your bag". The product page had already preselected "M · your saved size" when she arrived.<span class="shot-id">usability_concierge_actions.png</span></figcaption>
+    </figure>
+
+    <h3>B. Bag → pickup checkout → confirmed order</h3>
+    <div class="grid2">
+      <figure>
+        <a href="app_check_images/usability_bag.png" target="_blank"><img src="app_check_images/usability_bag.png" alt="Bag drawer with free-shipping progress bar and low-stock warning"></a>
+        <figcaption><b>Figure 3.4 — A bag that helps you buy.</b> The drawer shows a free-shipping progress bar ("$7.00 away") and a low-stock note ("only 5 left" in M, which matches the database). It also offers "Save for later" and one-click checkout.<span class="shot-id">usability_bag.png</span></figcaption>
+      </figure>
+      <figure>
+        <a href="app_check_images/usability_checkout.png" target="_blank"><img src="app_check_images/usability_checkout.png" alt="Checkout with pickup at 57 Broadway selected, tax and total shown"></a>
+        <figcaption><b>Figure 3.5 — Checkout on one page, with pickup.</b> The email is prefilled from her account. Pickup at the 57 Broadway shop is free, Connecticut tax (6.35%) is itemised, and the button states the exact total: "Place order · $72.32".<span class="shot-id">usability_checkout.png</span></figcaption>
+      </figure>
+    </div>
+    <figure style="margin-top:22px" class="tall">
+      <a href="app_check_images/usability_order_confirmed.png" target="_blank"><img src="app_check_images/usability_order_confirmed.png" alt="Order confirmed page: Thank you, Maya, order BB-EDYRLJ"></a>
+      <figcaption><b>Figure 3.6 — Order confirmed and stored.</b> "Thank you, Maya!" appears with order number BB-EDYRLJ, next steps and a pickup date. In the database the order row reads total $72.32, fulfilment "pickup", status "processing", and size-M stock dropped from 5 to 4.<span class="shot-id">usability_order_confirmed.png</span></figcaption>
+    </figure>
+
+    <h3>C. My Account remembers the customer</h3>
+    <figure>
+      <a href="app_check_images/usability_account_overview.png" target="_blank"><img src="app_check_images/usability_account_overview.png" alt="My Account overview with orders, saved pieces, size M and concierge messages"></a>
+      <figcaption><b>Figure 3.7 — Everything in one place.</b> The overview counts 1 order, 1 saved piece, size M and 2 concierge messages, and shows the new order with a progress tracker (placed → printing → ready for pickup).<span class="shot-id">usability_account_overview.png</span></figcaption>
+    </figure>
+    <div class="grid2" style="margin-top:22px">
+      <figure>
+        <a href="app_check_images/usability_wishlist.png" target="_blank"><img src="app_check_images/usability_wishlist.png" alt="Wishlist tab with the Champion Reverse Weave Crewneck and live stock"></a>
+        <figcaption><b>Figure 3.8 — The wishlist the chatbot filled.</b> The crewneck the chatbot saved in Figure 3.2 is here with live stock ("In stock in 2 sizes", i.e. M and XL), so the customer can come back and buy it later.<span class="shot-id">usability_wishlist.png</span></figcaption>
+      </figure>
+      <figure>
+        <a href="app_check_images/usability_orders.png" target="_blank"><img src="app_check_images/usability_orders.png" alt="Orders tab with order BB-EDYRLJ, pickup details and Buy again"></a>
+        <figcaption><b>Figure 3.9 — Order history with Buy again.</b> Order BB-EDYRLJ shows pickup details, the itemised total ($68.00 + $4.32 tax = $72.32) and a "Buy again" button for one-tap repeat purchases.<span class="shot-id">usability_orders.png</span></figcaption>
+      </figure>
+    </div>
+    <div class="proof"><b>Proven:</b> a customer went from one chat message to a confirmed, stored order with almost no friction. The chatbot used her saved size and took real actions, the progress messages showed it was working, checkout took one page, and every result (bag, wishlist, order, stock change) appeared both on the site and in the database.</div>
+    <p class="note">Test data was removed after the run: the Maya Chen account, her order, wishlist, chat history and product views were deleted, and all stock levels were restored (Basic Hoodie Big Yale in M is back to 5).</p>
+  </section>
+
+  <!-- ============================================================ FIXED -->
+  <section id="fixed">
+    <h2>Bugs the app check found, and fixed</h2>
+    <p class="lede">Testing the live site the way a customer would turned up four real problems. We fixed each one and re-ran every check afterwards; all screenshots above come from the final, fixed run.</p>
+    <table>
+      <thead><tr><th style="width:24%">Problem found</th><th>Cause</th><th style="width:34%">Fix</th><th style="width:9%">Status</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>The chatbot answered "What hoodies do you have?" with a fallback message ("That one needs a closer look…") instead of the results page.</td>
+          <td>Every model request resends the chatbot's roughly 27,000-token instructions, so a search plus its answer used about 61,000 tokens. That is just over the 60,000 per-message safety budget.</td>
+          <td>Raised the per-message token budget to 150,000 in <code>backend/agent.py</code>. The 8-request and 12-tool-call caps still stop runaway loops.</td>
+          <td><span class="badge badge--fixed">FIXED</span></td>
+        </tr>
+        <tr>
+          <td>The backend was still running code from before the latest edits.</td>
+          <td>The auto-reloader had not noticed file changes in the OneDrive folder, so the server kept its 6:38 PM code.</td>
+          <td>Restarted the backend and re-ran all checks against the current code.</td>
+          <td><span class="badge badge--fixed">FIXED</span></td>
+        </tr>
+        <tr>
+          <td>On a 390 px phone every page could be dragged sideways (page 442 px wide).</td>
+          <td>A long email address in the footer could not wrap, and the product filter row (search box + sort) did not shrink.</td>
+          <td>Let footer links wrap, let footer and filter columns shrink, and hide the "Sort" label on phones. All pages now measure exactly 390 px.</td>
+          <td><span class="badge badge--fixed">FIXED</span></td>
+        </tr>
+        <tr>
+          <td>A grey shadow strip showed along the right edge of the page.</td>
+          <td>The closed bag drawer sat only 22 px off-screen, and its 80 px shadow reached back into view.</td>
+          <td>The closed drawer is now fully hidden (<code>visibility: hidden</code>), which also keeps keyboard focus out of it.</td>
+          <td><span class="badge badge--fixed">FIXED</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ============================================================ METHOD -->
+  <section id="method">
+    <h2>How the test was run</h2>
+    <table>
+      <tbody>
+        <tr><th style="width:24%">Browser</th><td>Microsoft Edge, driven by Playwright, as a real user: clicking the chat button, typing questions, pressing Enter, clicking cards and buttons. Desktop at 1440 × 900 (1080 tall for the check 1 close-ups), phone at 390 × 844 with touch.</td></tr>
+        <tr><th>Live answers</th><td>No answer was scripted or mocked. Each question went through the real backend and model, and the answers above are copied exactly from the chat, with their response times.</td></tr>
+        <tr><th>Database truth</th><td>Stock and prices were read straight from <code>data/campus_customs.db</code> (<code>catalogue</code>, <code>inventory</code>, <code>orders</code>) during the same run and compared with what the chatbot and the site showed.</td></tr>
+        <tr><th>Fresh sessions</th><td>Each inventory question ran in a new browser session, so no earlier conversation could help the chatbot answer.</td></tr>
+        <tr><th>Console errors</th><td>None. The browser console and page errors were recorded throughout the run and the list stayed empty.</td></tr>
+        <tr><th>Clean-up</th><td>The test customer and everything she created were deleted afterwards, and stock was restored, so the store's data is unchanged.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">Yale Bulldog Blue by Campus Customs · Problem 11 app check · Screenshots in <code>app_check_images/</code> · Generated from the test run on September 28, 2026.</div>
+</footer>
+
+</body>
+</html>
