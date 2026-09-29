@@ -90,14 +90,21 @@ def whiten_background(src: Path, dst: Path) -> None:
     if background.getbbox():
         im.paste((255, 255, 255), mask=background.filter(ImageFilter.MaxFilter(5)))
     dst.parent.mkdir(parents=True, exist_ok=True)
-    im.save(dst, "JPEG", quality=92)
+    # Write to a temp file and swap it in, so a request never reads a half-written image.
+    tmp = dst.with_name(f"{dst.stem}.{uuid.uuid4().hex}.tmp")
+    im.save(tmp, "JPEG", quality=92)
+    tmp.replace(dst)
+
+
+_image_lock = threading.Lock()
 
 
 def cached_image(filename: str) -> Path:
     src = IMAGES_DIR / filename
     cached = IMAGE_CACHE_DIR / filename
-    if not cached.exists() or cached.stat().st_mtime < src.stat().st_mtime:
-        whiten_background(src, cached)
+    with _image_lock:
+        if not cached.exists() or cached.stat().st_mtime < src.stat().st_mtime:
+            whiten_background(src, cached)
     return cached
 
 
@@ -116,7 +123,10 @@ def prewarm_images() -> None:
 async def lifespan(_: FastAPI):
     customers.ensure_schema()
     account.ensure_schema()
-    agent.get_agent()  # build the agent and its HTTP client now, not on the first customer's message
+    try:
+        agent.get_agent()  # build the agent and its HTTP client now, not on the first customer's message
+    except RuntimeError as exc:
+        log.warning("Chat is unavailable until an API key is set: %s", exc)
     threading.Thread(target=prewarm_images, daemon=True).start()
     yield
 

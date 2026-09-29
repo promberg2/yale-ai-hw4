@@ -49,6 +49,15 @@ The files `catalog.py`, `customers.py`, `account.py`, `auth.py` and `audit.py` s
 
 ---
 
+## Get the code
+
+```
+git clone https://github.com/promberg2/yale-ai-hw4.git
+cd yale-ai-hw4/hw4
+```
+
+(Or use **Code → Download ZIP** on GitHub and unzip it.) All commands below start in this `hw4/` folder.
+
 ## Before you start: place the data pack
 
 The database and product images are **not** in this repository. Copy the course data pack into this folder so that it looks like this:
@@ -66,7 +75,7 @@ hw4/
 
 - **Python 3.10 or newer** (tested with 3.14)
 - **Node.js 20 or newer** (tested with 24)
-- A **Portkey API key** for the model (a direct `OPENAI_API_KEY` also works as a fallback)
+- A **Portkey API key** for the model (a direct `OPENAI_API_KEY` also works as a fallback). The repository contains no key, so you need your own. Without one, the whole shop still works except the chat, which then answers that it is having trouble and suggests emailing the store; the backend log says the key is missing.
 
 ## 1. Add your API key
 
@@ -82,15 +91,27 @@ Windows: `copy .env.example .env` · macOS/Linux: `cp .env.example .env`
 
 ## 2. Start the backend (terminal 1)
 
+Windows (PowerShell), from `hw4/`:
+
 ```
-cd hw4
 python -m venv .venv
-.venv\Scripts\activate            # Windows
-# source .venv/bin/activate       # macOS/Linux
+.venv\Scripts\activate
 pip install -r requirements.txt
 cd backend
 uvicorn main:app --reload --port 8000
 ```
+
+macOS / Linux, from `hw4/`:
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cd backend
+uvicorn main:app --reload --port 8000
+```
+
+If Windows refuses to run `activate` ("running scripts is disabled on this system"), run `Set-ExecutionPolicy -Scope Process Bypass` in that terminal first, or skip activation and call the venv directly: `.venv\Scripts\python -m pip install -r requirements.txt`, then `cd backend` and `..\.venv\Scripts\python -m uvicorn main:app --reload --port 8000`.
 
 Check that it runs: open http://127.0.0.1:8000/api/health. It should show `{"status":"ok","products":102}`.
 
@@ -98,11 +119,15 @@ When it starts for the first time, the backend adds the tables it needs (wishlis
 
 ## 3. Start the frontend (terminal 2)
 
+From `hw4/`:
+
 ```
-cd hw4/frontend
+cd frontend
 npm install
 npm run dev
 ```
+
+`npm install` may print a warning about install scripts (for `esbuild`); it is harmless and the site runs normally.
 
 Open **http://localhost:5173**. The website forwards `/api` and `/images` requests to the backend on port 8000, so both must be running.
 
@@ -111,8 +136,9 @@ Open **http://localhost:5173**. The website forwards `/api` and `/images` reques
 - Click the **chat button** at the bottom right and ask, for example:
   - "What hoodies do you have?"
   - "Is the Champion Reverse Weave Crewneck in stock in L?"
-- **Create an account** (top right) to try customer memory, the wishlist, checkout and My Account.
+- **Create an account** (top right) to try customer memory, the wishlist, checkout and My Account. Or **Log in** with the test account from the data pack: `test@campuscustoms.yale.edu` / `password`.
 - Every chat message is recorded in `output/audit_trail.json` (append-only).
+- The Problem 11 test report is `output/app_check.html`. GitHub shows HTML files as source code, so open it from your downloaded copy (double-click it); its screenshots are in `output/app_check_images/`.
 
 ## Notes
 
